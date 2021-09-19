@@ -55,13 +55,6 @@ public class EmployeePayrollFileIOService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		try {
-//			Files.lines(new File(PAYROLL_FILE_NAME).toPath())
-//			.map(line -> line.trim())
-//			.forEach(line -> employeePayrollDatas.add(l));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 		return employeePayrollDatas;
 	}
 }

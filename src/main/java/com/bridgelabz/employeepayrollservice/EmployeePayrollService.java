@@ -54,7 +54,7 @@ public class EmployeePayrollService {
 	public long readEmployeePayrollData(I0Service ioservice) {
 		if (ioservice.equals(I0Service.FILE_I0)) {
 			this.employeePayrollList = new EmployeePayrollFileIOService().readData();
-			System.out.println("PARSED DATA FROM FILE: ");
+			System.out.println("Employee Details: ");
 			this.employeePayrollList.forEach(employee -> System.out.println(employee));
 		}
 		return this.employeePayrollList.size();
