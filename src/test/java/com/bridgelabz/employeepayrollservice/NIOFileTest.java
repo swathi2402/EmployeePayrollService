@@ -22,7 +22,7 @@ public class NIOFileTest {
 
 		Path playPath = Paths.get(HOME + "/" + PLAY_WITH_NIO);
 		if (Files.exists(playPath))
-			Files.deleteIfExists(playPath);
+			FileUtils.deleteFiles(playPath.toFile());
 		Assert.assertTrue(Files.notExists(playPath));
 
 		Files.createDirectory(playPath);
