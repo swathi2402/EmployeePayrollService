@@ -9,7 +9,7 @@ public class DBDemo {
 
 	public static void main(String[] args) {
 
-		String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
+		String jdbcURL = "jdbc:mysql://localhost:3306/employee_service?useSSL=false";
 		String userName = "root";
 		String password = "swathi*123";
 		Connection connection;
@@ -19,7 +19,16 @@ public class DBDemo {
 		} catch (ClassNotFoundException e) {
 			throw new IllegalStateException("lol", e);
 		}
+
 		listDrivers();
+
+		try {
+			System.out.println("Connecting to database" + jdbcURL);
+			connection = DriverManager.getConnection(jdbcURL, userName, password);
+			System.out.println("Connection is successfull" + connection);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void listDrivers() {
