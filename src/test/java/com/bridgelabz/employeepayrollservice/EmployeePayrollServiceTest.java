@@ -37,6 +37,6 @@ public class EmployeePayrollServiceTest {
 	public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount() throws SQLException {
 		EmployeePayrollService employeePayrollService=new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData= employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
-		assertEquals(3, employeePayrollData.size());
+		assertEquals(4, employeePayrollData.size());
 	}
 }

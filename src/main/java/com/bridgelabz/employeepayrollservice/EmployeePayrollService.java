@@ -1,5 +1,6 @@
 package com.bridgelabz.employeepayrollservice;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -60,9 +61,10 @@ public class EmployeePayrollService {
 		return this.employeePayrollList.size();
 	}
 
-	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) throws SQLException {
+		if(ioservice.equals(I0Service.DB_IO))
+			this.employeePayrollList = new EmployeePayrollDBService().readData();
+		return this.employeePayrollList;
 	}
 
 	public static void main(String[] args) {
