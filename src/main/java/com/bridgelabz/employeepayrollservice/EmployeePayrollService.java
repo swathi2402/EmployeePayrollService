@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class EmployeePayrollService {
 
 	public enum I0Service {
-		CONSOLE_IO, FILE_I0, DB_I0, REST_I0
+		CONSOLE_IO, FILE_I0, DB_IO, REST_I0
 	}
 
 	private List<EmployeePayrollData> employeePayrollList;
@@ -60,6 +60,11 @@ public class EmployeePayrollService {
 		return this.employeePayrollList.size();
 	}
 
+	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public static void main(String[] args) {
 		ArrayList<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService(employeePayrollList);
@@ -67,5 +72,6 @@ public class EmployeePayrollService {
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);
 		employeePayrollService.writeEmployeePayrollData(I0Service.CONSOLE_IO);
 	}
+
 
 }
