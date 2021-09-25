@@ -12,13 +12,14 @@ public class EmployeePayrollService {
 	}
 
 	private List<EmployeePayrollData> employeePayrollList;
+	private EmployeePayrollDBService employeePayrollDBService;
 
 	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {
 		this.employeePayrollList = employeePayrollList;
 	}
-	 
+
 	public EmployeePayrollService() {
-		// TODO Auto-generated constructor stub
+		employeePayrollDBService = EmployeePayrollDBService.getInstance();
 	}
 
 	private void readEmployeePayrollData(Scanner consoleInputReader) {
@@ -62,19 +63,28 @@ public class EmployeePayrollService {
 	}
 
 	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) throws SQLException {
-		if(ioservice.equals(I0Service.DB_IO))
+		if (ioservice.equals(I0Service.DB_IO))
 			this.employeePayrollList = new EmployeePayrollDBService().readData();
 		return this.employeePayrollList;
 	}
 
-	public void updateEmployeeSalary(String string, double d) {
-		// TODO Auto-generated method stub
-		
+	public void updateEmployeeSalary(String name, double salary) {
+		int result = new EmployeePayrollDBService().updateEmployeeData(name, salary);
+		if (result == 0)
+			return;
+		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+		if (employeePayrollData != null)
+			employeePayrollData.salary = salary;
 	}
 
-	public boolean checkEmployeePayrollInSyncWithDB(String string) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean checkEmployeePayrollInSyncWithDB(String name) {
+		List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
+		return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
+	}
+
+	private EmployeePayrollData getEmployeePayrollData(String name) {
+		return this.employeePayrollList.stream()
+				.filter(employeePayrollDataItem -> employeePayrollDataItem.name.equals(name)).findFirst().orElse(null);
 	}
 
 	public static void main(String[] args) {
@@ -84,8 +94,5 @@ public class EmployeePayrollService {
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);
 		employeePayrollService.writeEmployeePayrollData(I0Service.CONSOLE_IO);
 	}
-
-
-
 
 }
