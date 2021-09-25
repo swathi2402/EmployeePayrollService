@@ -67,6 +67,16 @@ public class EmployeePayrollService {
 		return this.employeePayrollList;
 	}
 
+	public void updateEmployeeSalary(String string, double d) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean checkEmployeePayrollInSyncWithDB(String string) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	public static void main(String[] args) {
 		ArrayList<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService(employeePayrollList);
@@ -74,6 +84,8 @@ public class EmployeePayrollService {
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);
 		employeePayrollService.writeEmployeePayrollData(I0Service.CONSOLE_IO);
 	}
+
+
 
 
 }

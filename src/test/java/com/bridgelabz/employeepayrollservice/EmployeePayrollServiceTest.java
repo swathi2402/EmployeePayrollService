@@ -14,8 +14,7 @@ public class EmployeePayrollServiceTest {
 
 	@Test
 	public void given3EmployeesWhenWrittenToFileShouldMatchEmployeeEntries() {
-		EmployeePayrollData[] arrayOfEmps = {
-				new EmployeePayrollData(1, "Jeff Bezos", 100000.0),
+		EmployeePayrollData[] arrayOfEmps = { new EmployeePayrollData(1, "Jeff Bezos", 100000.0),
 				new EmployeePayrollData(2, "Bill Gates", 200000.0),
 				new EmployeePayrollData(3, "Mark Zuckerberg", 300000.0) };
 		EmployeePayrollService employeePayrollService;
@@ -32,11 +31,20 @@ public class EmployeePayrollServiceTest {
 		long entries = employeePayrollService.readEmployeePayrollData(EmployeePayrollService.I0Service.FILE_I0);
 		assertEquals(3, entries);
 	}
-	
+
 	@Test
 	public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount() throws SQLException {
-		EmployeePayrollService employeePayrollService=new EmployeePayrollService();
-		List<EmployeePayrollData> employeePayrollData= employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService
+				.readEmployeePayrollDBData(I0Service.DB_IO);
 		assertEquals(4, employeePayrollData.size());
+	}
+
+	@Test
+	public void givenNewSalaryForEmployee_WhenUpdates_ShouldSyncWithDB() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService
+				.readEmployeePayrollDBData(I0Service.DB_IO);
+		employeePayrollService.updateEmployeeSalary("Terisa", 400000.0);
 	}
 }
