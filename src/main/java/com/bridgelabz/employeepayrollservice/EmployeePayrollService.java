@@ -12,13 +12,14 @@ public class EmployeePayrollService {
 	}
 
 	private List<EmployeePayrollData> employeePayrollList;
+	private EmployeePayrollDBService employeePayrollDBService;
 
 	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {
 		this.employeePayrollList = employeePayrollList;
 	}
 
 	public EmployeePayrollService() {
-
+		employeePayrollDBService = EmployeePayrollDBService.getInstance();
 	}
 
 	private void readEmployeePayrollData(Scanner consoleInputReader) {
@@ -63,12 +64,12 @@ public class EmployeePayrollService {
 
 	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) throws SQLException {
 		if (ioservice.equals(I0Service.DB_IO))
-			this.employeePayrollList = new EmployeePayrollDBService().readData();
+			this.employeePayrollList = employeePayrollDBService.readData();
 		return this.employeePayrollList;
 	}
 
 	public void updateEmployeeSalary(String name, double salary) {
-		int result = new EmployeePayrollDBService().updateEmployeeData(name, salary);
+		int result = employeePayrollDBService.updateEmployeeData(name, salary);
 		if (result == 0)
 			return;
 		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
@@ -77,7 +78,7 @@ public class EmployeePayrollService {
 	}
 
 	public boolean checkEmployeePayrollInSyncWithDB(String name) {
-		List<EmployeePayrollData> employeePayrollDataList = new EmployeePayrollDBService().getEmployeePayrollData(name);
+		List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
 		return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
 	}
 
