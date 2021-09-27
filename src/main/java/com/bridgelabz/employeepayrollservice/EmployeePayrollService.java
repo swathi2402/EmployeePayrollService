@@ -1,6 +1,5 @@
 package com.bridgelabz.employeepayrollservice;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -62,13 +61,13 @@ public class EmployeePayrollService {
 		return this.employeePayrollList.size();
 	}
 
-	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) throws SQLException {
+	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) throws EmployeePayrollException {
 		if (ioservice.equals(I0Service.DB_IO))
 			this.employeePayrollList = employeePayrollDBService.readData();
 		return this.employeePayrollList;
 	}
 
-	public void updateEmployeeSalary(String name, double salary) {
+	public void updateEmployeeSalary(String name, double salary) throws EmployeePayrollException {
 		int result = employeePayrollDBService.updateEmployeeData(name, salary);
 		if (result == 0)
 			return;
@@ -77,7 +76,7 @@ public class EmployeePayrollService {
 			employeePayrollData.basic_pay = salary;
 	}
 
-	public boolean checkEmployeePayrollInSyncWithDB(String name) {
+	public boolean checkEmployeePayrollInSyncWithDB(String name) throws EmployeePayrollException {
 		List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
 		return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
 	}
@@ -87,7 +86,7 @@ public class EmployeePayrollService {
 				.filter(employeePayrollDataItem -> employeePayrollDataItem.name.equals(name)).findFirst().orElse(null);
 	}
 
-	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) {
+	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) throws EmployeePayrollException {
 		List<EmployeePayrollData> employeesInGivenRange = employeePayrollDBService.getEmployeesFromDateRange(date);
 		return employeesInGivenRange;
 	}
@@ -100,27 +99,27 @@ public class EmployeePayrollService {
 		employeePayrollService.writeEmployeePayrollData(I0Service.CONSOLE_IO);
 	}
 
-	public double getSumOfSalaryBasedOnGender(char gender) {
+	public double getSumOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
 		double sumOfSalaries = employeePayrollDBService.getSumOfSalariesBasedOnGender(gender);
 		return sumOfSalaries;
 	}
 
-	public double getAverageOfSalaryBasedOnGender(char gender) {
+	public double getAverageOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
 		double averageOfSalaries = employeePayrollDBService.getAverageOfSalaryBasedOnGender(gender);
 		return averageOfSalaries;
 	}
 
-	public int getCountBasedOnGender(char gender) {
+	public int getCountBasedOnGender(char gender) throws EmployeePayrollException {
 		int count = employeePayrollDBService.getCountBasedOnGender(gender);
 		return count;
 	}
 
-	public double getMinimunOfSalaryBasedOnGender(char gender) {
+	public double getMinimunOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
 		double minimumOfSalaries = employeePayrollDBService.getMinimunOfSalaryBasedOnGender(gender);
 		return minimumOfSalaries;
 	}
 
-	public double getMaximumOfSalaryBasedOnGender(char gender) {
+	public double getMaximumOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
 		double maximumOfSalaries = employeePayrollDBService.getMaximunOfSalaryBasedOnGender(gender);
 		return maximumOfSalaries;
 	}

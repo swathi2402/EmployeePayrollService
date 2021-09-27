@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,20 +26,24 @@ public class EmployeePayrollDBService {
 
 	}
 
-	private Connection getConnection() throws SQLException {
+	private Connection getConnection() throws EmployeePayrollException {
 		String jdbcURL = "jdbc:mysql://localhost:3306/employee_service?useSSL=false";
 		String userName = "root";
 		String password = "swathi*123";
-		Connection connection;
+		Connection connection = null;
 
 		System.out.println("Connecting to database" + jdbcURL);
-		connection = DriverManager.getConnection(jdbcURL, userName, password);
+		try {
+			connection = DriverManager.getConnection(jdbcURL, userName, password);
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Error in Database loading");
+		}
 		System.out.println("Connection is successfull" + connection);
 
 		return connection;
 	}
 
-	public List<EmployeePayrollData> readData() throws SQLException {
+	public List<EmployeePayrollData> readData() throws EmployeePayrollException {
 		String sql = "SELECT id, name, basic_pay, start FROM employee_payroll";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		try (Connection connection = this.getConnection()) {
@@ -52,28 +57,33 @@ public class EmployeePayrollDBService {
 				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
 			}
 
+		} catch (SQLSyntaxErrorException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.UNKOWN_DATABASE, "Error in databse");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 		return employeePayrollList;
 	}
 
-	public int updateEmployeeData(String name, double salary) {
-		return this.updateEmployeeDataUsingStatement(name, salary);
+	public int updateEmployeeData(String name, double salary) throws EmployeePayrollException {
+		try {
+			return this.updateEmployeeDataUsingStatement(name, salary);
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+		}
 	}
 
-	private int updateEmployeeDataUsingStatement(String name, double salary) {
+	private int updateEmployeeDataUsingStatement(String name, double salary) throws EmployeePayrollException {
 		String sql = String.format("UPDATE employee_payroll SET basic_pay= %.2f WHERE name ='%s';", salary, name);
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
-		return 0;
 	}
 
-	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
+	public List<EmployeePayrollData> getEmployeePayrollData(String name) throws EmployeePayrollException {
 		List<EmployeePayrollData> employeePayrollList = null;
 		if (this.employeePayrollDataStatement == null)
 			this.prepareStatementForEmployeeData();
@@ -82,12 +92,12 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 		return employeePayrollList;
 	}
 
-	private List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) {
+	private List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) throws EmployeePayrollException {
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		try {
 			while (resultSet.next()) {
@@ -98,22 +108,22 @@ public class EmployeePayrollDBService {
 				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 		return employeePayrollList;
 	}
 
-	private void prepareStatementForEmployeeData() {
+	private void prepareStatementForEmployeeData() throws EmployeePayrollException {
 		try {
 			Connection connection = this.getConnection();
 			String sql = "SELECT id, name, basic_pay, start FROM employee_payroll WHERE name=?";
 			employeePayrollDataStatement = connection.prepareStatement(sql);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 	}
 
-	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) {
+	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) throws EmployeePayrollException {
 		String sql = String.format(
 				"SELECT id, name, basic_pay, start FROM employee_payroll WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());",
 				date);
@@ -123,12 +133,12 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = statement.executeQuery(sql);
 			employeesListInDateRange = this.getEmployeePayrollData(resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 		return employeesListInDateRange;
 	}
 
-	public double getSumOfSalariesBasedOnGender(char gender) {
+	public double getSumOfSalariesBasedOnGender(char gender) throws EmployeePayrollException {
 		String sql = String.format(
 				"SELECT gender, SUM(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
 
@@ -141,12 +151,12 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 		return sumOfSalaries;
 	}
 
-	public double getAverageOfSalaryBasedOnGender(char gender) {
+	public double getAverageOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
 		String sql = String.format(
 				"SELECT gender, AVG(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
 
@@ -159,12 +169,12 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 		return averageOfSalaries;
 	}
 
-	public int getCountBasedOnGender(char gender) {
+	public int getCountBasedOnGender(char gender) throws EmployeePayrollException {
 		String sql = String.format(
 				"SELECT gender, COUNT(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
 
@@ -177,12 +187,12 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 		return count;
 	}
 
-	public double getMinimunOfSalaryBasedOnGender(char gender) {
+	public double getMinimunOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
 		String sql = String.format(
 				"SELECT gender, MIN(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
 
@@ -195,12 +205,12 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 		return minimumOfSalaries;
 	}
 
-	public double getMaximunOfSalaryBasedOnGender(char gender) {
+	public double getMaximunOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
 		String sql = String.format(
 				"SELECT gender, MAX(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
 
@@ -213,7 +223,7 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
 		}
 		return maximumOfSalaries;
 	}
