@@ -95,4 +95,9 @@ public class EmployeePayrollService {
 		employeePayrollService.writeEmployeePayrollData(I0Service.CONSOLE_IO);
 	}
 
+	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
