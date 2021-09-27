@@ -25,7 +25,7 @@ public class EmployeePayrollDBService {
 	}
 
 	public List<EmployeePayrollData> readData() throws SQLException {
-		String sql = "select id, name, basic_pay, start FROM employee_payroll";
+		String sql = "SELECT id, name, basic_pay, start FROM employee_payroll";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
@@ -49,7 +49,7 @@ public class EmployeePayrollDBService {
 	}
 
 	private int updateEmployeeDataUsingStatement(String name, double salary) {
-		String sql = String.format("update employee_payroll set basic_pay= %.2f where name ='%s';", salary, name);
+		String sql = String.format("UPDATE employee_payroll SET basic_pay= %.2f WHERE name ='%s';", salary, name);
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
@@ -89,4 +89,32 @@ public class EmployeePayrollDBService {
 		return employeePayrollList;
 	}
 
+<<<<<<< HEAD
 }
+=======
+	private void prepareStatementForEmployeeData() {
+		try {
+			Connection connection = this.getConnection();
+			String sql = "SELECT id, name, basic_pay, start FROM employee_payroll WHERE name=?";
+			employeePayrollDataStatement = connection.prepareStatement(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) {
+		String sql = String.format(
+				"SELECT id, name, basic_pay, start FROM employee_payroll WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());",
+				date);
+		List<EmployeePayrollData> employeesListInDateRange = new ArrayList<>();
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			employeesListInDateRange = this.getEmployeePayrollData(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return employeesListInDateRange;
+	}
+}
+>>>>>>> employee_payroll_service_jdbc_uc5

@@ -86,6 +86,11 @@ public class EmployeePayrollService {
 				.filter(employeePayrollDataItem -> employeePayrollDataItem.name.equals(name)).findFirst().orElse(null);
 	}
 
+	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) {
+		List<EmployeePayrollData> employeesInGivenRange = employeePayrollDBService.getEmployeesFromDateRange(date);
+		return employeesInGivenRange;
+	}
+
 	public static void main(String[] args) {
 		ArrayList<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService(employeePayrollList);
