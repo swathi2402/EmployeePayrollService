@@ -39,7 +39,7 @@ public class EmployeePayrollDBService {
 	}
 
 	public List<EmployeePayrollData> readData() throws SQLException {
-		String sql = "SELECT * FROM employee_payroll";
+		String sql = "select id, name, basic_pay, start FROM employee_payroll";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
@@ -94,7 +94,8 @@ public class EmployeePayrollDBService {
 				int id = resultSet.getInt("id");
 				String name = resultSet.getString("name");
 				Double salary = resultSet.getDouble("basic_pay");
-				employeePayrollList.add(new EmployeePayrollData(id, name, salary));
+				LocalDate startDate = resultSet.getDate("start").toLocalDate();
+				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -105,7 +106,7 @@ public class EmployeePayrollDBService {
 	private void prepareStatementForEmployeeData() {
 		try {
 			Connection connection = this.getConnection();
-			String sql = "select id, name, basic_pay from employee_payroll where name=?";
+			String sql = "select id, name, basic_pay, start from employee_payroll where name=?";
 			employeePayrollDataStatement = connection.prepareStatement(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
