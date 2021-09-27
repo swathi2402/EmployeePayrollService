@@ -100,4 +100,9 @@ public class EmployeePayrollService {
 		employeePayrollService.writeEmployeePayrollData(I0Service.CONSOLE_IO);
 	}
 
+	public double getSumOfSalaryBasedOnGender(char c) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

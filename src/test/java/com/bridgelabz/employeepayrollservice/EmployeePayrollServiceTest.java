@@ -67,4 +67,11 @@ public class EmployeePayrollServiceTest {
 		List<EmployeePayrollData> employeesListInDateRange = employeePayrollService.getEmployeesFromDateRange(date);
 		assertEquals(2, employeesListInDateRange.size());
 	}
+
+	@Test
+	public void givenEmployees_getSumOfSalaryOfFemaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		double sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender('F');
+		assertEquals(3000000.00, sumOfSalary, 0.0);
+	}
 }
