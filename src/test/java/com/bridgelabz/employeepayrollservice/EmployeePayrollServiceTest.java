@@ -67,4 +67,74 @@ public class EmployeePayrollServiceTest {
 		List<EmployeePayrollData> employeesListInDateRange = employeePayrollService.getEmployeesFromDateRange(date);
 		assertEquals(2, employeesListInDateRange.size());
 	}
+
+	@Test
+	public void givenEmployees_getSumOfSalaryOfFemaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		double sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender('F');
+		assertEquals(300000.0, sumOfSalary, 0.0);
+	}
+	
+	@Test
+	public void givenEmployees_getSumOfSalaryOfMaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		double sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender('M');
+		assertEquals(700000.0, sumOfSalary, 0.0);
+	}
+	
+	@Test
+	public void givenEmployees_getAverageOfSalaryOfFemaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		double averageOfSalaries = employeePayrollService.getAverageOfSalaryBasedOnGender('F');
+		assertEquals(300000.0, averageOfSalaries, 0.0);
+	}
+	
+	@Test
+	public void givenEmployees_getAverageOfSalaryOfMaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		double averageOfSalaries = employeePayrollService.getAverageOfSalaryBasedOnGender('M');
+		assertEquals(350000.0, averageOfSalaries, 0.0);
+	}
+	
+	@Test
+	public void givenEmployees_getCountOfMaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		int count = employeePayrollService.getCountBasedOnGender('M');
+		assertEquals(2, count);
+	}
+	
+	@Test
+	public void givenEmployees_getCountOfFemaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		int count = employeePayrollService.getCountBasedOnGender('F');
+		assertEquals(1, count);
+	}
+	
+	@Test
+	public void givenEmployees_getMinimumOfSalaryOfFemaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		double minimumOfSalaries = employeePayrollService.getMinimunOfSalaryBasedOnGender('F');
+		assertEquals(300000.0, minimumOfSalaries, 0.0);
+	}
+	
+	@Test
+	public void givenEmployees_getMinimumOfSalaryOfMaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		double minimumOfSalaries = employeePayrollService.getMinimunOfSalaryBasedOnGender('M');
+		assertEquals(300000.0, minimumOfSalaries, 0.0);
+	}
+	
+	@Test
+	public void givenEmployees_getMaximumOfSalaryOfFemaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		double maximumOfSalaries = employeePayrollService.getMaximumOfSalaryBasedOnGender('F');
+		assertEquals(300000.0, maximumOfSalaries, 0.0);
+	}
+	
+	@Test
+	public void givenEmployees_getMaximumOfSalaryOfMaleEmployees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		double maximumOfSalaries = employeePayrollService.getMaximumOfSalaryBasedOnGender('M');
+		assertEquals(400000.0, maximumOfSalaries, 0.0);
+	}
 }

@@ -100,4 +100,29 @@ public class EmployeePayrollService {
 		employeePayrollService.writeEmployeePayrollData(I0Service.CONSOLE_IO);
 	}
 
+	public double getSumOfSalaryBasedOnGender(char gender) {
+		double sumOfSalaries = employeePayrollDBService.getSumOfSalariesBasedOnGender(gender);
+		return sumOfSalaries;
+	}
+
+	public double getAverageOfSalaryBasedOnGender(char gender) {
+		double averageOfSalaries = employeePayrollDBService.getAverageOfSalaryBasedOnGender(gender);
+		return averageOfSalaries;
+	}
+
+	public int getCountBasedOnGender(char gender) {
+		int count = employeePayrollDBService.getCountBasedOnGender(gender);
+		return count;
+	}
+
+	public double getMinimunOfSalaryBasedOnGender(char gender) {
+		double minimumOfSalaries = employeePayrollDBService.getMinimunOfSalaryBasedOnGender(gender);
+		return minimumOfSalaries;
+	}
+
+	public double getMaximumOfSalaryBasedOnGender(char gender) {
+		double maximumOfSalaries = employeePayrollDBService.getMaximunOfSalaryBasedOnGender(gender);
+		return maximumOfSalaries;
+	}
+
 }
