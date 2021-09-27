@@ -41,6 +41,16 @@ public class EmployeePayrollServiceTest {
 		assertEquals(3, employeePayrollData.size());
 	}
 
+	
+	@Test
+	public void givenNewSalaryForEmployee_WhenUpdatesWithStatements_ShouldSyncWithDB() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
+		employeePayrollService.updateEmployeeSalary("Terisa", 300000.00);
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
+		assertTrue(result);
+	}
+	
 	@Test
 	public void givenNewSalaryForEmployee_WhenUpdates_ShouldSyncWithDB() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
