@@ -72,6 +72,6 @@ public class EmployeePayrollServiceTest {
 	public void givenEmployees_getSumOfSalaryOfFemaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		double sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender('F');
-		assertEquals(3000000.00, sumOfSalary, 0.0);
+		assertEquals(300000.0, sumOfSalary, 0.0);
 	}
 }

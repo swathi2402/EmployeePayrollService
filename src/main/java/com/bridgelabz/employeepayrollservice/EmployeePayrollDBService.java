@@ -128,25 +128,22 @@ public class EmployeePayrollDBService {
 		return employeesListInDateRange;
 	}
 
-	public int[] excecuteAggrigateFunction() throws SQLException {
-		int[] result = null;
+	public double getSumOfSalariesBasedOnGender(char gender) {
+		String sql = String.format(
+				"SELECT gender, AVG(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
+
+		double sumOfSalaries = 0.0;
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
-			String sql1 = "SELECT gender, AVG(basic_pay) FROM employee_payroll GROUP BY gender;";
-			statement.addBatch(sql1);
-			String sql2 = "SELECT gender, SUM(basic_pay) FROM employee_payroll GROUP BY gender;";
-			statement.addBatch(sql2);
-			String sql13 = "SELECT gender, MIN(basic_pay) FROM employee_payroll GROUP BY gender;";
-			statement.addBatch(sql13);
-			String sql14 = "SELECT gender, MAX(basic_pay) FROM employee_payroll GROUP BY gender;";
-			statement.addBatch(sql14);
-			String sql5 = "SELECT gender, COUNT(basic_pay) FROM employee_payroll GROUP BY gender;";
-			statement.addBatch(sql5);
-			result = statement.executeBatch();
-			connection.commit();
+			ResultSet resultSet = statement.executeQuery(sql);
+			while (resultSet.next()) {
+				sumOfSalaries = resultSet.getDouble(2);
+			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return sumOfSalaries;
 	}
+
 }
