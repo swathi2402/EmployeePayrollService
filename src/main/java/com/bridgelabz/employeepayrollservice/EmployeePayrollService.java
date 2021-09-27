@@ -64,17 +64,17 @@ public class EmployeePayrollService {
 
 	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) throws SQLException {
 		if (ioservice.equals(I0Service.DB_IO))
-			this.employeePayrollList = new EmployeePayrollDBService().readData();
+			this.employeePayrollList = employeePayrollDBService.readData();
 		return this.employeePayrollList;
 	}
 
 	public void updateEmployeeSalary(String name, double salary) {
-		int result = new EmployeePayrollDBService().updateEmployeeData(name, salary);
+		int result = employeePayrollDBService.updateEmployeeData(name, salary);
 		if (result == 0)
 			return;
 		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
 		if (employeePayrollData != null)
-			employeePayrollData.salary = salary;
+			employeePayrollData.basic_pay = salary;
 	}
 
 	public boolean checkEmployeePayrollInSyncWithDB(String name) {
