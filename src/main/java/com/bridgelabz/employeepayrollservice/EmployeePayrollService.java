@@ -87,17 +87,17 @@ public class EmployeePayrollService {
 				.filter(employeePayrollDataItem -> employeePayrollDataItem.name.equals(name)).findFirst().orElse(null);
 	}
 
+	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) {
+		List<EmployeePayrollData> employeesInGivenRange = employeePayrollDBService.getEmployeesFromDateRange(date);
+		return employeesInGivenRange;
+	}
+
 	public static void main(String[] args) {
 		ArrayList<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService(employeePayrollList);
 		Scanner consoleInputReader = new Scanner(System.in);
 		employeePayrollService.readEmployeePayrollData(consoleInputReader);
 		employeePayrollService.writeEmployeePayrollData(I0Service.CONSOLE_IO);
-	}
-
-	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

@@ -49,7 +49,7 @@ public class EmployeePayrollServiceTest {
 		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
 		assertTrue(result);
 	}
-	
+
 	@Test
 	public void givenNewSalaryForEmployee_WhenUpdates_ShouldSyncWithDB() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
@@ -58,13 +58,13 @@ public class EmployeePayrollServiceTest {
 		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
 		assertTrue(result);
 	}
-	
-	@Test 
+
+	@Test
 	public void givenDateRange_WhenRetrieved_ShouldMatchEmplyoeeCount() throws SQLException {
-		EmployeePayrollService employeePayrollService= new EmployeePayrollService();
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
-		String date="2018-01-01";
-		List<EmployeePayrollData> employeesListInDateRange=employeePayrollService.getEmployeesFromDateRange(date);
-		assertEquals(3, employeesListInDateRange.size());
+		String date = "2020-01-01";
+		List<EmployeePayrollData> employeesListInDateRange = employeePayrollService.getEmployeesFromDateRange(date);
+		assertEquals(2, employeesListInDateRange.size());
 	}
 }
