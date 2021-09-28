@@ -65,6 +65,12 @@ public class EmployeePayrollService {
 		this.employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name, gender, salary, startDate));
 
 	}
+	
+	public void addEmployeeToPayroll(int i, int j, String string, double d, String string2, String string3, char c,
+			LocalDate now) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	public long readEmployeePayrollData(I0Service ioservice) {
 		if (ioservice.equals(I0Service.FILE_I0)) {

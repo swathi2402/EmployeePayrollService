@@ -161,7 +161,20 @@ public class EmployeePayrollServiceTest {
 		try {
 			employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
 			employeePayrollService.addEmployeeToPayroll("Mark", 'M', 200000.0, LocalDate.now());
-			boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
+			boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Mark");
+			assertTrue(result);
+		} catch (EmployeePayrollException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void givenNewEmployee_WhenAddedTransaction_ShouldBeInSyncWithDB() {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		try {
+			employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
+			employeePayrollService.addEmployeeToPayroll(1, 101, "Sam", 200000.0, "7788990066", "Karnataka", 'F', LocalDate.now());
+			boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Sam");
 			assertTrue(result);
 		} catch (EmployeePayrollException e) {
 			e.printStackTrace();
