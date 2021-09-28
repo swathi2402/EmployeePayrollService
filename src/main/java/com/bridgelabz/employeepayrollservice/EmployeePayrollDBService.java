@@ -68,6 +68,30 @@ public class EmployeePayrollDBService {
 		}
 		return employeePayrollList;
 	}
+	
+	public List<EmployeePayrollData> readDataTransition() throws EmployeePayrollException {
+		String sql = "SELECT id, employee_name, salary, start FROM employee";
+		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while (result.next()) {
+				int id = result.getInt("id");
+				String name = result.getString("employee_name");
+				Double salary = result.getDouble("salary");
+				LocalDate startDate = result.getDate("start").toLocalDate();
+				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
+			}
+
+		} catch (SQLSyntaxErrorException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.UNKOWN_DATABASE,
+					"Error in databse");
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
+		}
+		return employeePayrollList;
+	}
 
 	public int updateEmployeeData(String name, double salary) throws EmployeePayrollException {
 		try {
@@ -109,8 +133,8 @@ public class EmployeePayrollDBService {
 		try {
 			while (resultSet.next()) {
 				int id = resultSet.getInt("id");
-				String name = resultSet.getString("name");
-				Double salary = resultSet.getDouble("basic_pay");
+				String name = resultSet.getString("employee_name");
+				Double salary = resultSet.getDouble("salary");
 				LocalDate startDate = resultSet.getDate("start").toLocalDate();
 				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
 			}
@@ -124,7 +148,7 @@ public class EmployeePayrollDBService {
 	private void prepareStatementForEmployeeData() throws EmployeePayrollException {
 		try {
 			Connection connection = this.getConnection();
-			String sql = "SELECT id, name, basic_pay, start FROM employee_payroll WHERE name=?";
+			String sql = "SELECT id, employee_name, salary, start FROM employee WHERE employee_name=?";
 			employeePayrollDataStatement = connection.prepareStatement(sql);
 		} catch (SQLException e) {
 			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
@@ -231,6 +255,53 @@ public class EmployeePayrollDBService {
 			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
 					"Syntax error in sql statement");
 		}
+		return employeePayrollData;
+	}
+
+	public EmployeePayrollData addEmployeeToPayrollTransaction(int companyId, int departmentId, String name,
+			double salary, String phoneNumber, String address, char gender, LocalDate startDate)
+			throws EmployeePayrollException {
+		int employeeID = -1;
+		Connection connection = null;
+		EmployeePayrollData employeePayrollData = null;
+		try {
+			connection = this.getConnection();
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "SQL Error");
+		}
+
+		try (Statement statement = connection.createStatement()) {
+			String sql = String.format(
+					"INSERT INTO employee (company_id, department_id, employee_name, salary, phone_number, address, gender, start) VALUES ('%d', '%d', '%s','%s', '%s', '%s', '%c','%s');",
+					companyId, departmentId, name, salary, phoneNumber, address, gender, Date.valueOf(startDate));
+			int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+			if (rowAffected == 1) {
+				ResultSet resultSet = statement.getGeneratedKeys();
+				if (resultSet.next())
+					employeeID = resultSet.getInt(1);
+			}
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "SQL Error");
+		}
+
+		try (Statement statement = connection.createStatement()) {
+			double deduction = salary * 0.2;
+			double taxablePay = salary - deduction;
+			double tax = taxablePay * 0.1;
+			double netPay = salary - tax;
+			
+			String sql = String.format(
+					"INSERT INTO payroll VALUES ('%d', '%s','%s', '%s', '%s', '%s');",
+					employeeID, salary, deduction, taxablePay, tax, netPay);
+			int rowAffected = statement.executeUpdate(sql);
+			if (rowAffected == 1) {
+				employeePayrollData = new EmployeePayrollData(employeeID, name, salary, startDate);
+			}
+			
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax Error");
+		}
+
 		return employeePayrollData;
 	}
 

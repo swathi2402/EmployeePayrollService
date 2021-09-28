@@ -65,11 +65,11 @@ public class EmployeePayrollService {
 		this.employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name, gender, salary, startDate));
 
 	}
-	
-	public void addEmployeeToPayroll(int i, int j, String string, double d, String string2, String string3, char c,
-			LocalDate now) {
-		// TODO Auto-generated method stub
-		
+
+	public void addEmployeeToPayroll(int companyId, int departmentId, String name, double salary, String phoneNumber,
+			String address, char gender, LocalDate startDate) throws EmployeePayrollException {
+		this.employeePayrollList.add(employeePayrollDBService.addEmployeeToPayrollTransaction(companyId, departmentId,
+				name, salary, phoneNumber, address, gender, startDate));
 	}
 
 	public long readEmployeePayrollData(I0Service ioservice) {
@@ -80,10 +80,10 @@ public class EmployeePayrollService {
 		}
 		return this.employeePayrollList.size();
 	}
-
+//
 	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) throws EmployeePayrollException {
 		if (ioservice.equals(I0Service.DB_IO))
-			this.employeePayrollList = employeePayrollDBService.readData();
+			this.employeePayrollList = employeePayrollDBService.readDataTransition();
 		return this.employeePayrollList;
 	}
 

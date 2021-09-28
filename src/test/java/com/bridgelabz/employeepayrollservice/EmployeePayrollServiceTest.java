@@ -169,11 +169,11 @@ public class EmployeePayrollServiceTest {
 	}
 	
 	@Test
-	public void givenNewEmployee_WhenAddedTransaction_ShouldBeInSyncWithDB() {
+	public void givenNewEmployee_WhenAddedTransition_ShouldBeInSyncWithDB() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		try {
 			employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
-			employeePayrollService.addEmployeeToPayroll(1, 101, "Sam", 200000.0, "7788990066", "Karnataka", 'F', LocalDate.now());
+			employeePayrollService.addEmployeeToPayroll(1, 101, "Sam", 500000.0, "7788990066", "Karnataka", 'F', LocalDate.now());
 			boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Sam");
 			assertTrue(result);
 		} catch (EmployeePayrollException e) {
