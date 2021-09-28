@@ -20,7 +20,11 @@ public class EmployeePayrollServiceTest {
 				new EmployeePayrollData(3, "Mark Zuckerberg", 300000.0) };
 		EmployeePayrollService employeePayrollService;
 		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
-		employeePayrollService.writeEmployeePayrollData(EmployeePayrollService.I0Service.FILE_I0);
+		try {
+			employeePayrollService.writeEmployeePayrollData(EmployeePayrollService.I0Service.FILE_I0);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		employeePayrollService.printData(EmployeePayrollService.I0Service.FILE_I0);
 		long entries = employeePayrollService.countEntries(EmployeePayrollService.I0Service.FILE_I0);
 		assertEquals(3, entries);
@@ -148,6 +152,14 @@ public class EmployeePayrollServiceTest {
 			assertEquals(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, e.type);
 			System.out.println(e.getMessage());
 		}
-
+	}
+	
+	@Test
+	public void Employees() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.writeEmployeePayrollData(EmployeePayrollService.I0Service.DB_IO);
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService
+				.readEmployeePayrollDBData(I0Service.DB_IO);
+		assertEquals(4, employeePayrollData.size());
 	}
 }

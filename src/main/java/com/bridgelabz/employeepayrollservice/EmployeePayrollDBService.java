@@ -36,11 +36,27 @@ public class EmployeePayrollDBService {
 		try {
 			connection = DriverManager.getConnection(jdbcURL, userName, password);
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Error in Database loading");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Error in Database loading");
 		}
 		System.out.println("Connection is successfull" + connection);
 
 		return connection;
+	}
+
+	public void writeToDatabase() throws EmployeePayrollException {
+		String sql = "INSERT INTO employee_payroll (name, gender, basic_pay, start) VALUES ('Mark', 'M', 200000.0, '2020-09-23');";
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(sql);
+			
+		} catch (SQLSyntaxErrorException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.UNKOWN_DATABASE,
+					"Error in databse");
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
+		}
 	}
 
 	public List<EmployeePayrollData> readData() throws EmployeePayrollException {
@@ -58,9 +74,11 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLSyntaxErrorException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.UNKOWN_DATABASE, "Error in databse");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.UNKOWN_DATABASE,
+					"Error in databse");
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return employeePayrollList;
 	}
@@ -69,7 +87,8 @@ public class EmployeePayrollDBService {
 		try {
 			return this.updateEmployeeDataUsingStatement(name, salary);
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 	}
 
@@ -79,7 +98,8 @@ public class EmployeePayrollDBService {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 	}
 
@@ -92,7 +112,8 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
 			employeePayrollList = this.getEmployeePayrollData(resultSet);
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return employeePayrollList;
 	}
@@ -108,7 +129,8 @@ public class EmployeePayrollDBService {
 				employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
 			}
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return employeePayrollList;
 	}
@@ -119,7 +141,8 @@ public class EmployeePayrollDBService {
 			String sql = "SELECT id, name, basic_pay, start FROM employee_payroll WHERE name=?";
 			employeePayrollDataStatement = connection.prepareStatement(sql);
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 	}
 
@@ -133,7 +156,8 @@ public class EmployeePayrollDBService {
 			ResultSet resultSet = statement.executeQuery(sql);
 			employeesListInDateRange = this.getEmployeePayrollData(resultSet);
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return employeesListInDateRange;
 	}
@@ -151,7 +175,8 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return sumOfSalaries;
 	}
@@ -169,7 +194,8 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return averageOfSalaries;
 	}
@@ -187,7 +213,8 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return count;
 	}
@@ -205,7 +232,8 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return minimumOfSalaries;
 	}
@@ -223,8 +251,10 @@ public class EmployeePayrollDBService {
 			}
 
 		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax error in sql statement");
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
 		}
 		return maximumOfSalaries;
 	}
+
 }

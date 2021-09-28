@@ -31,11 +31,20 @@ public class EmployeePayrollService {
 		employeePayrollList.add(new EmployeePayrollData(id, name, salary));
 	}
 
-	void writeEmployeePayrollData(I0Service ioservice) {
-		if (ioservice.equals(I0Service.CONSOLE_IO))
+	void writeEmployeePayrollData(I0Service ioservice) throws EmployeePayrollException {
+		switch (ioservice) {
+		case CONSOLE_IO:
 			System.out.println("\nWriting Employee Payroll to Console\n" + employeePayrollList);
-		else if (ioservice.equals(I0Service.FILE_I0)) {
+			break;
+			
+		case FILE_I0:
 			new EmployeePayrollFileIOService().writeData(employeePayrollList);
+			break;
+			
+		case DB_IO:
+			new EmployeePayrollDBService().writeToDatabase();
+		default:
+			break;
 		}
 	}
 
@@ -91,7 +100,7 @@ public class EmployeePayrollService {
 		return employeesInGivenRange;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws EmployeePayrollException {
 		ArrayList<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService(employeePayrollList);
 		Scanner consoleInputReader = new Scanner(System.in);
