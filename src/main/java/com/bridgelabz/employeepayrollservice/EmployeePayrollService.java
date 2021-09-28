@@ -64,11 +64,11 @@ public class EmployeePayrollService {
 		return 0;
 	}
 
-	public void addEmployeeToPayroll(String string, char c, double d, LocalDate now) {
-		// TODO Auto-generated method stub
-		
+	public void addEmployeeToPayroll(String name, char gender, double salary, LocalDate startDate) throws EmployeePayrollException {
+		this.employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name, gender, salary, startDate));
+
 	}
-	
+
 	public long readEmployeePayrollData(I0Service ioservice) {
 		if (ioservice.equals(I0Service.FILE_I0)) {
 			this.employeePayrollList = new EmployeePayrollFileIOService().readData();

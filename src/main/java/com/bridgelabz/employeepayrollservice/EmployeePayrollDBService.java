@@ -1,6 +1,7 @@
 package com.bridgelabz.employeepayrollservice;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -168,7 +169,7 @@ public class EmployeePayrollDBService {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(sql);
 			if (resultSet.next())
-				result =  resultSet.getDouble(2);
+				result = resultSet.getDouble(2);
 
 		} catch (SQLException e) {
 			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
@@ -223,6 +224,29 @@ public class EmployeePayrollDBService {
 				"SELECT gender, MAX(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
 
 		return excecuteStatement(sql);
+	}
+
+	public EmployeePayrollData addEmployeeToPayroll(String name, char gender, double salary, LocalDate startDate)
+			throws EmployeePayrollException {
+		int employeeID = -1;
+		EmployeePayrollData employeePayrollData = null;
+		String sql = String.format(
+				"INSERT INTO employee_payroll (name, gender, basic_pay, start) VALUES ('%s','%c','%s','%s');", name,
+				gender, salary, Date.valueOf(startDate));
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
+			if (rowAffected == 1) {
+				ResultSet resultSet = statement.getGeneratedKeys();
+				if (resultSet.next())
+					employeeID = resultSet.getInt(1);
+			}
+			employeePayrollData = new EmployeePayrollData(employeeID, name, salary, startDate);
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
+		}
+		return employeePayrollData;
 	}
 
 }
