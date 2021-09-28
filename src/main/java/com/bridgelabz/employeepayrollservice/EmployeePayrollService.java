@@ -1,5 +1,6 @@
 package com.bridgelabz.employeepayrollservice;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -36,13 +37,15 @@ public class EmployeePayrollService {
 		case CONSOLE_IO:
 			System.out.println("\nWriting Employee Payroll to Console\n" + employeePayrollList);
 			break;
-			
+
 		case FILE_I0:
 			new EmployeePayrollFileIOService().writeData(employeePayrollList);
 			break;
-			
+
 		case DB_IO:
 			new EmployeePayrollDBService().writeToDatabase();
+			break;
+
 		default:
 			break;
 		}
@@ -61,6 +64,11 @@ public class EmployeePayrollService {
 		return 0;
 	}
 
+	public void addEmployeeToPayroll(String string, char c, double d, LocalDate now) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public long readEmployeePayrollData(I0Service ioservice) {
 		if (ioservice.equals(I0Service.FILE_I0)) {
 			this.employeePayrollList = new EmployeePayrollFileIOService().readData();

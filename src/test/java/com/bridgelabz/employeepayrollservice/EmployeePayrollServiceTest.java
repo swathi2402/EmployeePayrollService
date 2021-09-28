@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class EmployeePayrollServiceTest {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService
 				.readEmployeePayrollDBData(I0Service.DB_IO);
-		assertEquals(3, employeePayrollData.size());
+		assertEquals(4, employeePayrollData.size());
 	}
 
 	@Test
@@ -69,21 +70,21 @@ public class EmployeePayrollServiceTest {
 		employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
 		String date = "2020-01-01";
 		List<EmployeePayrollData> employeesListInDateRange = employeePayrollService.getEmployeesFromDateRange(date);
-		assertEquals(2, employeesListInDateRange.size());
+		assertEquals(3, employeesListInDateRange.size());
 	}
 
 	@Test
 	public void givenEmployees_getSumOfSalaryOfFemaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		double sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender('F');
-		assertEquals(300000.0, sumOfSalary, 0.0);
+		assertEquals(400000.0, sumOfSalary, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getSumOfSalaryOfMaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		double sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender('M');
-		assertEquals(700000.0, sumOfSalary, 0.0);
+		assertEquals(900000.0, sumOfSalary, 0.0);
 	}
 
 	@Test
@@ -97,14 +98,14 @@ public class EmployeePayrollServiceTest {
 	public void givenEmployees_getAverageOfSalaryOfMaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		double averageOfSalaries = employeePayrollService.getAverageOfSalaryBasedOnGender('M');
-		assertEquals(350000.0, averageOfSalaries, 0.0);
+		assertEquals(300000.0, averageOfSalaries, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getCountOfMaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		int count = employeePayrollService.getCountBasedOnGender('M');
-		assertEquals(2, count);
+		assertEquals(3, count);
 	}
 
 	@Test
@@ -155,11 +156,24 @@ public class EmployeePayrollServiceTest {
 	}
 	
 	@Test
-	public void Employees() throws SQLException {
+	public void writeToDatabase_AndGiveTheFinalCount_OfEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		employeePayrollService.writeEmployeePayrollData(EmployeePayrollService.I0Service.DB_IO);
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService
 				.readEmployeePayrollDBData(I0Service.DB_IO);
 		assertEquals(4, employeePayrollData.size());
+	}
+	
+	@Test
+	public void givenNewEmployee_WhenAdded_ShouldBeInSyncWithDB() {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		try {
+			employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
+			employeePayrollService.addEmployeeToPayroll("Mark", 'M', 200000.0, LocalDate.now());
+			boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
+			assertTrue(result);
+		} catch (EmployeePayrollException e) {
+			e.printStackTrace();
+		}
 	}
 }
