@@ -154,16 +154,7 @@ public class EmployeePayrollServiceTest {
 			System.out.println(e.getMessage());
 		}
 	}
-	
-	@Test
-	public void writeToDatabase_AndGiveTheFinalCount_OfEmployees() throws SQLException {
-		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		employeePayrollService.writeEmployeePayrollData(EmployeePayrollService.I0Service.DB_IO);
-		List<EmployeePayrollData> employeePayrollData = employeePayrollService
-				.readEmployeePayrollDBData(I0Service.DB_IO);
-		assertEquals(4, employeePayrollData.size());
-	}
-	
+
 	@Test
 	public void givenNewEmployee_WhenAdded_ShouldBeInSyncWithDB() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();

@@ -42,10 +42,6 @@ public class EmployeePayrollService {
 			new EmployeePayrollFileIOService().writeData(employeePayrollList);
 			break;
 
-		case DB_IO:
-			new EmployeePayrollDBService().writeToDatabase();
-			break;
-
 		default:
 			break;
 		}
@@ -64,7 +60,8 @@ public class EmployeePayrollService {
 		return 0;
 	}
 
-	public void addEmployeeToPayroll(String name, char gender, double salary, LocalDate startDate) throws EmployeePayrollException {
+	public void addEmployeeToPayroll(String name, char gender, double salary, LocalDate startDate)
+			throws EmployeePayrollException {
 		this.employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name, gender, salary, startDate));
 
 	}

@@ -45,21 +45,6 @@ public class EmployeePayrollDBService {
 		return connection;
 	}
 
-	public void writeToDatabase() throws EmployeePayrollException {
-		String sql = "INSERT INTO employee_payroll (name, gender, basic_pay, start) VALUES ('Mark', 'M', 200000.0, '2020-09-23');";
-		try (Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(sql);
-
-		} catch (SQLSyntaxErrorException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.UNKOWN_DATABASE,
-					"Error in databse");
-		} catch (SQLException e) {
-			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
-					"Syntax error in sql statement");
-		}
-	}
-
 	public List<EmployeePayrollData> readData() throws EmployeePayrollException {
 		String sql = "SELECT id, name, basic_pay, start FROM employee_payroll";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
