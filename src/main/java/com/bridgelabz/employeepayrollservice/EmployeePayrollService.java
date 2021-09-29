@@ -144,4 +144,9 @@ public class EmployeePayrollService {
 		return maximumOfSalaries;
 	}
 
+	public void deleteEmployeeToPayroll(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

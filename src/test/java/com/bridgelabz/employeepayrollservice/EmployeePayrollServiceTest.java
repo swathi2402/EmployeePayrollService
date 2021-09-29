@@ -1,6 +1,7 @@
 package com.bridgelabz.employeepayrollservice;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
@@ -176,6 +177,19 @@ public class EmployeePayrollServiceTest {
 			employeePayrollService.addEmployeeToPayroll(1, 101, "Sam", 500000.0, "7788990066", "Karnataka", 'F', LocalDate.now());
 			boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Sam");
 			assertTrue(result);
+		} catch (EmployeePayrollException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void givenEmployee_WhenDeleted_ShouldBeInSyncWithDB() {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		try {
+			employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
+			employeePayrollService.deleteEmployeeToPayroll("Sam");
+			boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Sam");
+			assertFalse(result);
 		} catch (EmployeePayrollException e) {
 			e.printStackTrace();
 		}
