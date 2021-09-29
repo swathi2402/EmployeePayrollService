@@ -266,6 +266,7 @@ public class EmployeePayrollDBService {
 		EmployeePayrollData employeePayrollData = null;
 		try {
 			connection = this.getConnection();
+			connection.setAutoCommit(false);
 		} catch (SQLException e) {
 			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "SQL Error");
 		}
@@ -281,6 +282,12 @@ public class EmployeePayrollDBService {
 					employeeID = resultSet.getInt(1);
 			}
 		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "SQL Error");
+
+			}
 			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "SQL Error");
 		}
 
@@ -298,7 +305,15 @@ public class EmployeePayrollDBService {
 				employeePayrollData = new EmployeePayrollData(employeeID, name, salary, startDate);
 			}
 			
+			connection.commit();
+			
 		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "SQL Error");
+
+			}
 			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, "Syntax Error");
 		}
 
