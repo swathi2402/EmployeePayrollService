@@ -70,7 +70,7 @@ public class EmployeePayrollDBService {
 	}
 
 	public List<EmployeePayrollData> readDataTransition() throws EmployeePayrollException {
-		String sql = "SELECT id, employee_name, salary, start FROM employee";
+		String sql = "SELECT id, employee_name, salary, start FROM employee JOIN payroll ON emp_id = id WHERE is_active = true;";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
@@ -161,7 +161,7 @@ public class EmployeePayrollDBService {
 	private void prepareStatementForEmployeeData() throws EmployeePayrollException {
 		try {
 			Connection connection = this.getConnection();
-			String sql = "SELECT id, employee_name, salary, start FROM employee WHERE employee_name=?";
+			String sql = "SELECT id, employee_name, salary, start FROM employee JOIN payroll ON emp_id = id WHERE employee_name = ? AND is_active = true;";
 			employeePayrollDataStatement = connection.prepareStatement(sql);
 		} catch (SQLException e) {
 			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
