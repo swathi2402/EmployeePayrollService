@@ -80,7 +80,7 @@ public class EmployeePayrollService {
 		}
 		return this.employeePayrollList.size();
 	}
-//
+
 	public List<EmployeePayrollData> readEmployeePayrollDBData(I0Service ioservice) throws EmployeePayrollException {
 		if (ioservice.equals(I0Service.DB_IO))
 			this.employeePayrollList = employeePayrollDBService.readDataTransition();
@@ -94,6 +94,11 @@ public class EmployeePayrollService {
 		EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
 		if (employeePayrollData != null)
 			employeePayrollData.basic_pay = salary;
+	}
+
+	public int deleteEmployeeToPayroll(String name) throws EmployeePayrollException {
+		int result = employeePayrollDBService.deleteEmployeeData(name);
+		return result;
 	}
 
 	public boolean checkEmployeePayrollInSyncWithDB(String name) throws EmployeePayrollException {
@@ -142,11 +147,6 @@ public class EmployeePayrollService {
 	public double getMaximumOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
 		double maximumOfSalaries = employeePayrollDBService.getMaximunOfSalaryBasedOnGender(gender);
 		return maximumOfSalaries;
-	}
-
-	public void deleteEmployeeToPayroll(String name) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

@@ -68,7 +68,7 @@ public class EmployeePayrollDBService {
 		}
 		return employeePayrollList;
 	}
-	
+
 	public List<EmployeePayrollData> readDataTransition() throws EmployeePayrollException {
 		String sql = "SELECT id, employee_name, salary, start FROM employee";
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
@@ -104,6 +104,17 @@ public class EmployeePayrollDBService {
 
 	private int updateEmployeeDataUsingStatement(String name, double salary) throws EmployeePayrollException {
 		String sql = String.format("UPDATE employee_payroll SET basic_pay= %.2f WHERE name ='%s';", salary, name);
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			return statement.executeUpdate(sql);
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
+		}
+	}
+	
+	public int deleteEmployeeData(String name) throws EmployeePayrollException {
+		String sql = String.format("DELETE FROM employee WHERE employee_name = '%s';",  name);
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
@@ -296,17 +307,16 @@ public class EmployeePayrollDBService {
 			double taxablePay = salary - deduction;
 			double tax = taxablePay * 0.1;
 			double netPay = salary - tax;
-			
-			String sql = String.format(
-					"INSERT INTO payroll VALUES ('%d', '%s','%s', '%s', '%s', '%s');",
-					employeeID, salary, deduction, taxablePay, tax, netPay);
+
+			String sql = String.format("INSERT INTO payroll VALUES ('%d', '%s','%s', '%s', '%s', '%s');", employeeID,
+					salary, deduction, taxablePay, tax, netPay);
 			int rowAffected = statement.executeUpdate(sql);
 			if (rowAffected == 1) {
 				employeePayrollData = new EmployeePayrollData(employeeID, name, salary, startDate);
 			}
-			
+
 			connection.commit();
-			
+
 		} catch (SQLException e) {
 			try {
 				connection.rollback();

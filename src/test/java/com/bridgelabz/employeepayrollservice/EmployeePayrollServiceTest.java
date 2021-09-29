@@ -187,9 +187,8 @@ public class EmployeePayrollServiceTest {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		try {
 			employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
-			employeePayrollService.deleteEmployeeToPayroll("Sam");
-			boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Sam");
-			assertFalse(result);
+			int result = employeePayrollService.deleteEmployeeToPayroll("Sam");
+			assertEquals(1, result);
 		} catch (EmployeePayrollException e) {
 			e.printStackTrace();
 		}
