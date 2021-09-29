@@ -112,9 +112,11 @@ public class EmployeePayrollDBService {
 					"Syntax error in sql statement");
 		}
 	}
-	
+
 	public int deleteEmployeeData(String name) throws EmployeePayrollException {
-		String sql = String.format("DELETE FROM employee WHERE employee_name = '%s';",  name);
+		String sql = String.format(
+				"UPDATE payroll SET is_active = false WHERE emp_id = (SELECT id FROM employee WHERE employee_name = '%s');",
+				name);
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql);
@@ -308,8 +310,9 @@ public class EmployeePayrollDBService {
 			double tax = taxablePay * 0.1;
 			double netPay = salary - tax;
 
-			String sql = String.format("INSERT INTO payroll VALUES ('%d', '%s','%s', '%s', '%s', '%s');", employeeID,
-					salary, deduction, taxablePay, tax, netPay);
+			String sql = String.format(
+					"INSERT INTO payroll (emp_id, basic_pay, deductions, taxable_pay, tax, net_pay) VALUES ('%d', '%s','%s', '%s', '%s', '%s');",
+					employeeID, salary, deduction, taxablePay, tax, netPay);
 			int rowAffected = statement.executeUpdate(sql);
 			if (rowAffected == 1) {
 				employeePayrollData = new EmployeePayrollData(employeeID, name, salary, startDate);
