@@ -10,7 +10,9 @@ import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeePayrollDBService {
 
@@ -200,11 +202,26 @@ public class EmployeePayrollDBService {
 		return result;
 	}
 
-	public double getSumOfSalariesBasedOnGender(char gender) throws EmployeePayrollException {
-		String sql = String.format(
-				"SELECT gender, SUM(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
-
-		return excecuteStatement(sql);
+	public Map<Character, Double> getSumOfSalariesBasedOnGender() throws EmployeePayrollException {
+		Map<Character,Double> sumOfSalaryMap = new HashMap<>();
+		String sql = String.format("SELECT gender, SUM(basic_pay) FROM employee JOIN payroll ON emp_id = id  WHERE is_active = true GROUP BY gender;");
+		try(Connection connection = this.getConnection();) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while(result.next()) {
+				char key = result.getString("gender").charAt(0);
+				Double value = result.getDouble("SUM(basic_pay)");
+				sumOfSalaryMap.put(key, value);
+			}
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
+		}
+		return sumOfSalaryMap;
+//		String sql = String.format(
+//				"SELECT gender, SUM(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
+//
+//		return excecuteStatement(sql);
 	}
 
 	public double getAverageOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {

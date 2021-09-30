@@ -3,6 +3,7 @@ package com.bridgelabz.employeepayrollservice;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class EmployeePayrollService {
@@ -124,9 +125,9 @@ public class EmployeePayrollService {
 		employeePayrollService.writeEmployeePayrollData(I0Service.CONSOLE_IO);
 	}
 
-	public double getSumOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
-		double sumOfSalaries = employeePayrollDBService.getSumOfSalariesBasedOnGender(gender);
-		return sumOfSalaries;
+	public Map<Character, Double> getSumOfSalaryBasedOnGender() throws EmployeePayrollException {
+		Map<Character, Double> sumOfSalaryMap = employeePayrollDBService.getSumOfSalariesBasedOnGender();
+		return sumOfSalaryMap;
 	}
 
 	public double getAverageOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {

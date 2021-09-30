@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -77,15 +78,15 @@ public class EmployeePayrollServiceTest {
 	@Test
 	public void givenEmployees_getSumOfSalaryOfFemaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		double sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender('F');
-		assertEquals(400000.0, sumOfSalary, 0.0);
+		Map<Character, Double> sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender();
+		assertEquals((double)sumOfSalary.get('F'), 400000.0, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getSumOfSalaryOfMaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		double sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender('M');
-		assertEquals(900000.0, sumOfSalary, 0.0);
+		Map<Character, Double> sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender();
+		assertEquals((double)sumOfSalary.get('M'), 500000.0, 0.0);
 	}
 
 	@Test
