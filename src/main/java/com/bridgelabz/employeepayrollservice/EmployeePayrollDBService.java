@@ -173,7 +173,7 @@ public class EmployeePayrollDBService {
 
 	public List<EmployeePayrollData> getEmployeesFromDateRange(String date) throws EmployeePayrollException {
 		String sql = String.format(
-				"SELECT id, name, basic_pay, start FROM employee_payroll WHERE start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());",
+				"SELECT id, name, basic_pay, start FROM employee_payroll WHERE is_active = true AND start BETWEEN CAST('%s' AS DATE) AND DATE(NOW());",
 				date);
 		List<EmployeePayrollData> employeesListInDateRange = new ArrayList<>();
 		try (Connection connection = this.getConnection()) {
