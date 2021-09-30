@@ -218,51 +218,79 @@ public class EmployeePayrollDBService {
 					"Syntax error in sql statement");
 		}
 		return sumOfSalaryMap;
-//		String sql = String.format(
-//				"SELECT gender, SUM(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
-//
-//		return excecuteStatement(sql);
 	}
 
-	public double getAverageOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
-		String sql = String.format(
-				"SELECT gender, AVG(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
-
-		return excecuteStatement(sql);
-	}
-
-	public int getCountBasedOnGender(char gender) throws EmployeePayrollException {
-		String sql = String.format(
-				"SELECT gender, COUNT(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
-
-		int count = 0;
-		try (Connection connection = this.getConnection()) {
+	public Map<Character, Double> getAverageOfSalaryBasedOnGender() throws EmployeePayrollException {
+		Map<Character,Double> averageOfSalaryMap = new HashMap<>();
+		String sql = String.format("SELECT gender, AVG(basic_pay) FROM employee JOIN payroll ON emp_id = id  WHERE is_active = true GROUP BY gender;");
+		try(Connection connection = this.getConnection();) {
 			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sql);
-			if (resultSet.next()) {
-				count = resultSet.getInt(2);
+			ResultSet result = statement.executeQuery(sql);
+			while(result.next()) {
+				char key = result.getString("gender").charAt(0);
+				Double value = result.getDouble("AVG(basic_pay)");
+				averageOfSalaryMap.put(key, value);
 			}
-
 		} catch (SQLException e) {
 			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
 					"Syntax error in sql statement");
 		}
-		return count;
+		return averageOfSalaryMap;
 	}
 
-	public double getMinimunOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
-		String sql = String.format(
-				"SELECT gender, MIN(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
+	public Map<Character,Integer> getCountBasedOnGender() throws EmployeePayrollException {
+		Map<Character,Integer> countMap = new HashMap<>();
+		String sql = String.format("SELECT gender, COUNT(basic_pay) FROM employee JOIN payroll ON emp_id = id  WHERE is_active = true GROUP BY gender;");
+		try(Connection connection = this.getConnection();) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while(result.next()) {
+				char key = result.getString("gender").charAt(0);
+				int value = result.getInt("COUNT(basic_pay)");
+				countMap.put(key, value);
+			}
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
+		}
+		return countMap;
+	}
 
-		return excecuteStatement(sql);
+	public Map<Character,Double> getMinimunOfSalaryBasedOnGender() throws EmployeePayrollException {
+		Map<Character,Double> minimumSalaryMap = new HashMap<>();
+		String sql = String.format("SELECT gender, MIN(basic_pay) FROM employee JOIN payroll ON emp_id = id  WHERE is_active = true GROUP BY gender;");
+		try(Connection connection = this.getConnection();) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while(result.next()) {
+				char key = result.getString("gender").charAt(0);
+				Double value = result.getDouble("MIN(basic_pay)");
+				minimumSalaryMap.put(key, value);
+			}
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
+		}
+		return minimumSalaryMap;
 
 	}
 
-	public double getMaximunOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
-		String sql = String.format(
-				"SELECT gender, MAX(basic_pay) FROM employee_payroll WHERE gender = '%c' GROUP BY gender;", gender);
-
-		return excecuteStatement(sql);
+	public Map<Character,Double> getMaximunOfSalaryBasedOnGender() throws EmployeePayrollException {
+		Map<Character,Double> maximumSalaryMap = new HashMap<>();
+		String sql = String.format("SELECT gender, MAX(basic_pay) FROM employee JOIN payroll ON emp_id = id  WHERE is_active = true GROUP BY gender;");
+		try(Connection connection = this.getConnection();) {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			while(result.next()) {
+				char key = result.getString("gender").charAt(0);
+				Double value = result.getDouble("MAX(basic_pay)");
+				maximumSalaryMap.put(key, value);
+			}
+		} catch (SQLException e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.SQL_EXCEPTION,
+					"Syntax error in sql statement");
+		}
+		return maximumSalaryMap;
 	}
 
 	public EmployeePayrollData addEmployeeToPayroll(String name, char gender, double salary, LocalDate startDate)

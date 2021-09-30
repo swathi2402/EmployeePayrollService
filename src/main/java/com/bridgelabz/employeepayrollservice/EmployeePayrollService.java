@@ -130,23 +130,23 @@ public class EmployeePayrollService {
 		return sumOfSalaryMap;
 	}
 
-	public double getAverageOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
-		double averageOfSalaries = employeePayrollDBService.getAverageOfSalaryBasedOnGender(gender);
+	public Map<Character, Double> getAverageOfSalaryBasedOnGender() throws EmployeePayrollException {
+		Map<Character, Double> averageOfSalaries = employeePayrollDBService.getAverageOfSalaryBasedOnGender();
 		return averageOfSalaries;
 	}
 
-	public int getCountBasedOnGender(char gender) throws EmployeePayrollException {
-		int count = employeePayrollDBService.getCountBasedOnGender(gender);
+	public Map<Character, Integer> getCountBasedOnGender() throws EmployeePayrollException {
+		Map<Character, Integer> count = employeePayrollDBService.getCountBasedOnGender();
 		return count;
 	}
 
-	public double getMinimunOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
-		double minimumOfSalaries = employeePayrollDBService.getMinimunOfSalaryBasedOnGender(gender);
+	public Map<Character, Double> getMinimunOfSalaryBasedOnGender() throws EmployeePayrollException {
+		Map<Character, Double> minimumOfSalaries = employeePayrollDBService.getMinimunOfSalaryBasedOnGender();
 		return minimumOfSalaries;
 	}
 
-	public double getMaximumOfSalaryBasedOnGender(char gender) throws EmployeePayrollException {
-		double maximumOfSalaries = employeePayrollDBService.getMaximunOfSalaryBasedOnGender(gender);
+	public Map<Character, Double> getMaximumOfSalaryBasedOnGender() throws EmployeePayrollException {
+		Map<Character, Double> maximumOfSalaries = employeePayrollDBService.getMaximunOfSalaryBasedOnGender();
 		return maximumOfSalaries;
 	}
 

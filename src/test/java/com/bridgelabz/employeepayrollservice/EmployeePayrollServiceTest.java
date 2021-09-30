@@ -1,7 +1,6 @@
 package com.bridgelabz.employeepayrollservice;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
@@ -79,70 +78,70 @@ public class EmployeePayrollServiceTest {
 	public void givenEmployees_getSumOfSalaryOfFemaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		Map<Character, Double> sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender();
-		assertEquals((double)sumOfSalary.get('F'), 400000.0, 0.0);
+		assertEquals((double) sumOfSalary.get('F'), 400000.0, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getSumOfSalaryOfMaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		Map<Character, Double> sumOfSalary = employeePayrollService.getSumOfSalaryBasedOnGender();
-		assertEquals((double)sumOfSalary.get('M'), 500000.0, 0.0);
+		assertEquals((double) sumOfSalary.get('M'), 500000.0, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getAverageOfSalaryOfFemaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		double averageOfSalaries = employeePayrollService.getAverageOfSalaryBasedOnGender('F');
-		assertEquals(300000.0, averageOfSalaries, 0.0);
+		Map<Character, Double> averageOfSalaries = employeePayrollService.getAverageOfSalaryBasedOnGender();
+		assertEquals((double) averageOfSalaries.get('F'), 400000.0, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getAverageOfSalaryOfMaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		double averageOfSalaries = employeePayrollService.getAverageOfSalaryBasedOnGender('M');
-		assertEquals(300000.0, averageOfSalaries, 0.0);
+		Map<Character, Double> averageOfSalaries = employeePayrollService.getAverageOfSalaryBasedOnGender();
+		assertEquals((double) averageOfSalaries.get('M'), 500000.0, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getCountOfMaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		int count = employeePayrollService.getCountBasedOnGender('M');
-		assertEquals(3, count);
+		Map<Character, Integer> count = employeePayrollService.getCountBasedOnGender();
+		assertEquals((int) count.get('M'), 1);
 	}
 
 	@Test
 	public void givenEmployees_getCountOfFemaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		int count = employeePayrollService.getCountBasedOnGender('F');
-		assertEquals(1, count);
+		Map<Character, Integer> count = employeePayrollService.getCountBasedOnGender();
+		assertEquals((int) count.get('F'), 1);
 	}
 
 	@Test
 	public void givenEmployees_getMinimumOfSalaryOfFemaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		double minimumOfSalaries = employeePayrollService.getMinimunOfSalaryBasedOnGender('F');
-		assertEquals(300000.0, minimumOfSalaries, 0.0);
+		Map<Character, Double> minimumOfSalaries = employeePayrollService.getMinimunOfSalaryBasedOnGender();
+		assertEquals((double) minimumOfSalaries.get('F'), 400000.0, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getMinimumOfSalaryOfMaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		double minimumOfSalaries = employeePayrollService.getMinimunOfSalaryBasedOnGender('M');
-		assertEquals(300000.0, minimumOfSalaries, 0.0);
+		Map<Character, Double> minimumOfSalaries = employeePayrollService.getMinimunOfSalaryBasedOnGender();
+		assertEquals((double) minimumOfSalaries.get('M'), 500000.0, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getMaximumOfSalaryOfFemaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		double maximumOfSalaries = employeePayrollService.getMaximumOfSalaryBasedOnGender('F');
-		assertEquals(300000.0, maximumOfSalaries, 0.0);
+		Map<Character, Double> maximumOfSalaries = employeePayrollService.getMaximumOfSalaryBasedOnGender();
+		assertEquals((double) maximumOfSalaries.get('F'), 400000.0, 0.0);
 	}
 
 	@Test
 	public void givenEmployees_getMaximumOfSalaryOfMaleEmployees() throws SQLException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		double maximumOfSalaries = employeePayrollService.getMaximumOfSalaryBasedOnGender('M');
-		assertEquals(400000.0, maximumOfSalaries, 0.0);
+		Map<Character, Double> maximumOfSalaries = employeePayrollService.getMaximumOfSalaryBasedOnGender();
+		assertEquals((double) maximumOfSalaries.get('M'), 500000.0, 0.0);
 	}
 
 	@Test
@@ -150,7 +149,7 @@ public class EmployeePayrollServiceTest {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		try {
 			employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
-			employeePayrollService.getCountBasedOnGender('M');
+			employeePayrollService.getCountBasedOnGender();
 		} catch (EmployeePayrollException e) {
 			assertEquals(EmployeePayrollException.ExceptionType.SQL_EXCEPTION, e.type);
 			System.out.println(e.getMessage());
@@ -169,20 +168,21 @@ public class EmployeePayrollServiceTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void givenNewEmployee_WhenAddedTransition_ShouldBeInSyncWithDB() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		try {
 			employeePayrollService.readEmployeePayrollDBData(I0Service.DB_IO);
-			employeePayrollService.addEmployeeToPayroll(1, 101, "Sam", 500000.0, "7788990066", "Karnataka", 'F', LocalDate.now());
+			employeePayrollService.addEmployeeToPayroll(1, 101, "Sam", 500000.0, "7788990066", "Karnataka", 'F',
+					LocalDate.now());
 			boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Sam");
 			assertTrue(result);
 		} catch (EmployeePayrollException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void givenEmployee_WhenDeleted_ShouldBeInSyncWithDB() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
